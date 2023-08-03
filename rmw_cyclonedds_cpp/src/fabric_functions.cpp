@@ -16,6 +16,7 @@
 
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace fabric_functions
 {
@@ -35,8 +36,16 @@ void fabric_logger(
     ", rmw xmt time ns: " << timestamp_diff <<
     ". RMWPUB TS: " << info_->source_timestamp <<
     ", RMWSUB TS: " << now_timestamp;
+  
+  std::vector<std::string> substrings;
+  substrings.reserve(2);
+  std::istringstream iss(std::string(subscription_->topic_name));
+  std::string token;
+  while (std::getline(iss, token, '/')) {
+    substrings.push_back(std::move(token));
+  }
 
-  RCUTILS_LOG_DEBUG_NAMED(dds_name_.c_str(), log_stream.str().c_str());
+  RCUTILS_LOG_DEBUG_NAMED((substrings[1] + "." + dds_name_).c_str(), log_stream.str().c_str());
 }
 
 }  // namespace fabric_functions
