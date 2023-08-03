@@ -16,19 +16,20 @@
 
 namespace fabric_functions
 {
-  FabricLogger::FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t *subscription_)
-    : info(info_), subscription(subscription_) {}
+FabricLogger::FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t * subscription_)
+: info(info_), subscription(subscription_) {}
 
-  void FabricLogger::get_log() {
-    auto now = std::chrono::system_clock::now();
-    int64_t now_timestamp =
-        std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
-    int64_t timestamp_diff = now_timestamp - info.source_timestamp;
+void FabricLogger::get_log()
+{
+  auto now = std::chrono::system_clock::now();
+  int64_t now_timestamp =
+    std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
+  int64_t timestamp_diff = now_timestamp - info.source_timestamp;
 
-    std::string log_message = "Topic: " + std::string(subscription->topic_name) +
-        ", rmw xmt time ns: " + std::to_string(timestamp_diff) + ". RMWPUB TS: " +
-        std::to_string(info.source_timestamp) + ", RMWSUB TS: " + std::to_string(now_timestamp);
+  std::string log_message = "Topic: " + std::string(subscription->topic_name) +
+    ", rmw xmt time ns: " + std::to_string(timestamp_diff) + ". RMWPUB TS: " +
+    std::to_string(info.source_timestamp) + ", RMWSUB TS: " + std::to_string(now_timestamp);
 
-    RCUTILS_LOG_DEBUG_NAMED("rmw.cyclone", log_message.c_str());
+  RCUTILS_LOG_DEBUG_NAMED("rmw.cyclone", log_message.c_str());
 }
 }

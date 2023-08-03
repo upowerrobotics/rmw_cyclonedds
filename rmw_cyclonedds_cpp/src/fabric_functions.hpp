@@ -29,10 +29,10 @@ class FabricLogger
 {
 private:
   const dds_sample_info_t info;
-  const rmw_subscription_t *subscription;
+  const rmw_subscription_t * subscription;
 
 public:
-  FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t *subscription_);
+  FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t * subscription_);
   void get_log();
 };
 
