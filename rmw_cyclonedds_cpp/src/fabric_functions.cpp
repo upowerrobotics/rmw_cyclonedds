@@ -15,6 +15,7 @@
 #include "fabric_functions.hpp"
 
 #include <sstream>
+#include <string>
 
 namespace fabric_functions
 {
@@ -44,4 +45,4 @@ void FabricLogger::get_log()
 
   RCUTILS_LOG_DEBUG_NAMED(dds_name.c_str(), log_stream.str().c_str());
 }
-}
+}  // namespace fabric_functions

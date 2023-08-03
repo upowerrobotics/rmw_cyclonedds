@@ -15,12 +15,12 @@
 #ifndef FABRIC_FUNCTIONS_HPP_
 #define FABRIC_FUNCTIONS_HPP_
 
+#include <chrono>
+#include <string>
+
 #include "dds/dds.h"
 #include "rcutils/logging_macros.h"
 #include "rmw/types.h"
-
-#include <string>
-#include <chrono>
 
 namespace fabric_functions
 {
