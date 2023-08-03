@@ -2905,7 +2905,7 @@ static rmw_ret_t rmw_take_int(
         message_info->received_timestamp = 0;
 
         // Get log for fabric
-        fabric_functions::fabric_logger(info, subscription, "CycloneDDS");
+        fabric_functions::fabric_logger(message_info, subscription, "CycloneDDS");
       }
 #if REPORT_LATE_MESSAGES > 0
       dds_time_t tnow = dds_time();

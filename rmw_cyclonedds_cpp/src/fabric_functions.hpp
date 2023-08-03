@@ -26,7 +26,7 @@ namespace fabric_functions
 {
 
 void fabric_logger(
-  const dds_sample_info_t info_,
+  const rmw_message_info_t * info_,
   const rmw_subscription_t * subscription_,
   const std::string dds_name_);
 
