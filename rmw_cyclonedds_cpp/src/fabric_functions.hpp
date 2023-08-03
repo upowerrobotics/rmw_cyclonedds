@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FABRIC_FUNCTION_HPP_
-#define FABRIC_FUNCTION_HPP_
+#ifndef FABRIC_FUNCTIONS_HPP_
+#define FABRIC_FUNCTIONS_HPP_
 
 #include "dds/dds.h"
 #include "rcutils/logging_macros.h"
@@ -28,14 +28,22 @@ namespace fabric_functions
 class FabricLogger
 {
 private:
-  const dds_sample_info_t info;
+  const int64_t timestamp;
   const rmw_subscription_t * subscription;
+  const std::string dds_name;
 
 public:
-  FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t * subscription_);
+  FabricLogger(
+    const dds_sample_info_t info_,
+    const rmw_subscription_t * subscription_,
+    const std::string dds_name_);
+  FabricLogger(
+    const rmw_message_info_t * info_,
+    const rmw_subscription_t * subscription_,
+    const std::string dds_name_);
   void get_log();
 };
 
 }  // namespace fabric_functions
 
-#endif  // EXCEPTION_HPP_
+#endif  // FABRIC_FUNCTIONS_HPP_

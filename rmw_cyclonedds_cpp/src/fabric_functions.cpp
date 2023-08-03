@@ -14,22 +14,34 @@
 
 #include "fabric_functions.hpp"
 
+#include <sstream>
+
 namespace fabric_functions
 {
-FabricLogger::FabricLogger(const dds_sample_info_t info_, const rmw_subscription_t * subscription_)
-: info(info_), subscription(subscription_) {}
+FabricLogger::FabricLogger(
+  const dds_sample_info_t info_,
+  const rmw_subscription_t * subscription_,
+  const std::string dds_name_)
+: timestamp(info_.source_timestamp), subscription(subscription_), dds_name(dds_name_) {}
+FabricLogger::FabricLogger(
+  const rmw_message_info_t * info_,
+  const rmw_subscription_t * subscription_,
+  const std::string dds_name_)
+: timestamp(info_->source_timestamp), subscription(subscription_), dds_name(dds_name_) {}
 
 void FabricLogger::get_log()
 {
   auto now = std::chrono::system_clock::now();
   int64_t now_timestamp =
     std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
-  int64_t timestamp_diff = now_timestamp - info.source_timestamp;
+  int64_t timestamp_diff = now_timestamp - timestamp;
 
-  std::string log_message = "Topic: " + std::string(subscription->topic_name) +
-    ", rmw xmt time ns: " + std::to_string(timestamp_diff) + ". RMWPUB TS: " +
-    std::to_string(info.source_timestamp) + ", RMWSUB TS: " + std::to_string(now_timestamp);
+  std::ostringstream log_stream;
+  log_stream << "Topic: " << subscription->topic_name <<
+    ", rmw xmt time ns: " << timestamp_diff <<
+    ". RMWPUB TS: " << timestamp <<
+    ", RMWSUB TS: " << now_timestamp;
 
-  RCUTILS_LOG_DEBUG_NAMED("rmw.cyclone", log_message.c_str());
+  RCUTILS_LOG_DEBUG_NAMED(dds_name.c_str(), log_stream.str().c_str());
 }
 }
