@@ -76,6 +76,8 @@
 
 #include "namespace_prefix.hpp"
 
+#include "fabric_functions.hpp"
+
 #include "dds/dds.h"
 #include "dds/ddsc/dds_data_allocator.h"
 #include "serdes.hpp"
@@ -2868,22 +2870,6 @@ extern "C" rmw_ret_t rmw_destroy_subscription(rmw_node_t * node, rmw_subscriptio
   return ret;
 }
 
-static void log_timestamp_for_fabric(
-  const dds_sample_info_t info,
-  const rmw_subscription_t * subscription)
-{
-  auto now = std::chrono::system_clock::now();
-  int64_t now_timestamp =
-    std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
-  int64_t timestamp_diff = now_timestamp - info.source_timestamp;
-
-  std::string log_message = "Topic: " + std::string(subscription->topic_name) +
-    ", rmw xmt time ns: " + std::to_string(timestamp_diff) + ". RMWPUB TS: " +
-    std::to_string(info.source_timestamp) + ", RMWSUB TS: " + std::to_string(now_timestamp);
-
-  RCUTILS_LOG_DEBUG_NAMED("rmw.cyclone", log_message.c_str());
-}
-
 static rmw_ret_t rmw_take_int(
   const rmw_subscription_t * subscription, void * ros_message,
   bool * taken, rmw_message_info_t * message_info)
@@ -2917,7 +2903,10 @@ static rmw_ret_t rmw_take_int(
         message_info->source_timestamp = info.source_timestamp;
         // TODO(iluetkeb) add received timestamp, when implemented by Cyclone
         message_info->received_timestamp = 0;
-        log_timestamp_for_fabric(info, subscription);
+
+        // Get log for fabric
+        fabric_functions::FabricLogger fabric_logger(info, subscription);
+        fabric_logger.get_log();
       }
 #if REPORT_LATE_MESSAGES > 0
       dds_time_t tnow = dds_time();
