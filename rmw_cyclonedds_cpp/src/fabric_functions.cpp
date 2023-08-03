@@ -21,19 +21,19 @@ namespace fabric_functions
 {
 
 void fabric_logger(
-  const dds_sample_info_t info_,
+  const rmw_message_info_t * info_,
   const rmw_subscription_t * subscription_,
   const std::string dds_name_)
 {
   auto now = std::chrono::system_clock::now();
   int64_t now_timestamp =
     std::chrono::time_point_cast<std::chrono::nanoseconds>(now).time_since_epoch().count();
-  int64_t timestamp_diff = now_timestamp - info_.source_timestamp;
+  int64_t timestamp_diff = now_timestamp - info_->source_timestamp;
 
   std::ostringstream log_stream;
   log_stream << "Topic: " << subscription_->topic_name <<
     ", rmw xmt time ns: " << timestamp_diff <<
-    ". RMWPUB TS: " << info_.source_timestamp <<
+    ". RMWPUB TS: " << info_->source_timestamp <<
     ", RMWSUB TS: " << now_timestamp;
 
   RCUTILS_LOG_DEBUG_NAMED(dds_name_.c_str(), log_stream.str().c_str());
