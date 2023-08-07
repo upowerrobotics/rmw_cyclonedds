@@ -64,7 +64,7 @@ add_library(rmw_cyclonedds_cpp
   src/Serialization.cpp
   src/TypeSupport2.cpp
   src/TypeSupport.cpp
-  src/fabric_functions.cpp)
+  src/fabric_functions.hpp)
 
 target_link_libraries(rmw_cyclonedds_cpp
   CycloneDDS::ddsc
