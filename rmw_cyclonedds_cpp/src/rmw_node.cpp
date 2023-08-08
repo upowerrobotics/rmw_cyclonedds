@@ -81,6 +81,8 @@
 
 #include "namespace_prefix.hpp"
 
+#include "fabric_functions.hpp"
+
 #include "dds/dds.h"
 #include "dds/ddsc/dds_data_allocator.h"
 #include "dds/ddsc/dds_loan_api.h"
@@ -3156,6 +3158,9 @@ static rmw_ret_t rmw_take_int(
       *taken = true;
       if (message_info) {
         message_info_from_sample_info(info, message_info);
+
+        // Get log for fabric
+        fabric_functions::fabric_logger(message_info, subscription, "CycloneDDS");
       }
 #if REPORT_LATE_MESSAGES > 0
       dds_time_t tnow = dds_time();
