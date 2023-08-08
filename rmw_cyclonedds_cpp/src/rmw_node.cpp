@@ -76,6 +76,8 @@
 
 #include "namespace_prefix.hpp"
 
+#include "fabric_functions.hpp"
+
 #include "dds/dds.h"
 #include "dds/ddsc/dds_data_allocator.h"
 #include "serdes.hpp"
@@ -2901,6 +2903,9 @@ static rmw_ret_t rmw_take_int(
         message_info->source_timestamp = info.source_timestamp;
         // TODO(iluetkeb) add received timestamp, when implemented by Cyclone
         message_info->received_timestamp = 0;
+
+        // Get log for fabric
+        fabric_functions::fabric_logger(message_info, subscription, "CycloneDDS");
       }
 #if REPORT_LATE_MESSAGES > 0
       dds_time_t tnow = dds_time();
