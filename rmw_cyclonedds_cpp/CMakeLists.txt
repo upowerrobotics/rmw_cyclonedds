@@ -78,7 +78,8 @@ add_library(rmw_cyclonedds_cpp
   src/deserialization_exception.cpp
   src/Serialization.cpp
   src/TypeSupport2.cpp
-  src/TypeSupport.cpp)
+  src/TypeSupport.cpp
+  src/fabric_functions.hpp)
 
 target_link_libraries(rmw_cyclonedds_cpp PRIVATE
   CycloneDDS::ddsc)
